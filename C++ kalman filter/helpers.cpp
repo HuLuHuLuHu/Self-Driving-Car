@@ -15,9 +15,10 @@
 #include <cmath>
 #include <string>
 #include <fstream> 
-// #include "debugging_helpers.cpp"
+#include "debugging_helpers.cpp"
 
 using namespace std;
+vector < vector <float> > zeros(int height, int width);
 
 /**
 	TODO - implement this function
@@ -34,6 +35,7 @@ using namespace std;
 vector< vector<float> > normalize(vector< vector <float> > grid) {
 	
 	vector< vector<float> > newGrid;
+	newGrid = zeros(grid.size(),grid[0].size());
 	float sum = 0;
 	for(int i=0;i<grid.size();i++)
 		for(int j=0;j<grid[0].size();j++)
@@ -86,9 +88,10 @@ vector < vector <float> > blur(vector < vector < float> > grid, float blurring) 
 	vector < vector <float> > newGrid;
 	
 	// your code here
+	newGrid = zeros(grid.size(),grid[0].size());
 	float temp = blurring/12;
 	int size_row = grid.size();
-	int size_col = j<grid[0].size();
+	int size_col = grid[0].size();
 	int left,right,up,down;
 	for(int i=0;i<size_row;i++)
 		for(int j=0;j<size_col;j++){
@@ -188,7 +191,7 @@ vector <char> read_line(string s) {
     @return - A grid of chars representing a map.
 */
 vector < vector <char> > read_map(string file_name) {
-	ifstream infile(file_name);
+	ifstream infile(file_name.c_str());
 	vector < vector <char> > map;
 	if (infile.is_open()) {
 
