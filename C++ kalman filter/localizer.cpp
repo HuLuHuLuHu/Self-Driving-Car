@@ -13,7 +13,7 @@
 
 #include "helpers.cpp"
 #include <stdlib.h>
-#include "debugging_helpers.cpp"
+//#include "debugging_helpers.cpp"
 
 using namespace std;
 
@@ -42,13 +42,10 @@ vector< vector <float> > initialize_beliefs(vector< vector <char> > grid) {
 	vector< vector <float> > newGrid;
 
 	// your code here
-  int count = 0;
-  float prob = 0;
-	count = grid.size() * grid[0].size();
-  prob = 1/count;
-  vector<float> row(grid[0].size(),prob);
-  for(int i=0;i<grid.size();i++)
-      newGrid.push_back(row);
+  newGrid = zeros(grid.size(),grid[0].size());
+  int count = grid.size() * grid[0].size();
+  float prob = 1.0/count;
+  newGrid.assign(grid.size(),vector <float> (grid[0].size(),prob));
 	return newGrid;
 }
 
@@ -96,10 +93,12 @@ vector< vector <float> > sense(char color,
 	float p_miss) 
 {
 	vector< vector <float> > newGrid;
-
-	int hit = 0,miss = 0;
-  for(int i=0;i<grid.size();i++)
-    for(int j=0;j<grid[0].size();j++){
+  newGrid = zeros(beliefs.size(),beliefs[0].size());
+  if(grid.size() != beliefs.size() || grid[0].size() != beliefs[0].size())
+	return newGrid;	
+int hit = 0,miss = 0;
+  for(int i=0;i<beliefs.size();i++)
+    for(int j=0;j<beliefs[0].size();j++){
       hit = (grid[i][j] == color);
       miss = (hit==1) ? 0:1;
       newGrid[i][j] = (p_hit * hit + p_miss * miss) * beliefs[i][j];
@@ -152,11 +151,11 @@ vector< vector <float> > move(int dy, int dx,
 {
 
 	vector < vector <float> > newGrid;
-
 	// your code here
+  newGrid = zeros(beliefs.size(),beliefs[0].size());
   for(int i=0;i<beliefs.size();i++)
     for(int j=0;j<beliefs[0].size();j++)
-      newGrid[i][j] = beliefs[i-dx][j-dy];
+      newGrid[(i+dx)%beliefs.size()][(j+dy)%beliefs[0].size()] = beliefs[i][j];
 
 
 	return blur(newGrid, blurring);
