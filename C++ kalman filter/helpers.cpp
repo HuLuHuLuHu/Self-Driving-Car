@@ -87,11 +87,19 @@ vector < vector <float> > blur(vector < vector < float> > grid, float blurring) 
 	
 	// your code here
 	float temp = blurring/12;
-	for(int i=0;i<grid.size();i++)
-		for(int j=0;j<grid[0].size();j++)
-			newGrid[i][j] = grid[i][j]*(1-blurring) + grid[i-1][j]*temp*2 + grid[i+1][j]*temp*2
-		+ grid[i][j+1]*temp*2 +  grid[i][j-1]*temp*2 + grid[i-1][j-1]*temp + grid[i-1][j+1]*temp 
-		+ grid[i+1][j-1]*temp + grid[i+1][j+1]*temp;
+	int size_row = grid.size();
+	int size_col = j<grid[0].size();
+	int left,right,up,down;
+	for(int i=0;i<size_row;i++)
+		for(int j=0;j<size_col;j++){
+			left = (i-1) % size_row;
+			right = (i+1) % size_row;
+			up = (j+1) % size_col;
+			down = (j-1) % size_col;
+			newGrid[i][j] = grid[i][j]*(1-blurring) + (grid[left][j] + grid[right][j]
+		+ grid[i][up] +  grid[i][down])*temp*2 + (grid[left][up] + grid[left][down]
+		+ grid[right][up] + grid[right][down])*temp;
+	}
 	return normalize(newGrid);
 }
 
